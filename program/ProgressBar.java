@@ -1,5 +1,7 @@
 package program;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 /*
  * ProgressBar creates and controls the loading  bar
  */
@@ -53,7 +55,7 @@ class ProgressBar extends Thread
                     isStuck = true;
                 }          
                 
-                Thread.sleep(500 * DELAY);
+                TimeUnit.MILLISECONDS.sleep(500 * DELAY);
             }
 
             if(isStuck)
@@ -61,9 +63,9 @@ class ProgressBar extends Thread
                updateProgressStuck();
             }
         } 
-        catch (InterruptedException ie) 
+        catch (InterruptedException exception) 
         {
-            Thread.currentThread().interrupt();
+            exception.printStackTrace();
         }
 
         isDone = true;
