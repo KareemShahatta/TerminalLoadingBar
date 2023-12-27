@@ -1,6 +1,8 @@
 package program;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 /*
  * Created by KareemShahatta on 12/26/2023
  * LoadingScreen is the application's main class for starting the simulation on the terminal
@@ -72,12 +74,12 @@ public class LoadingScreen
 
                 System.out.println(output.toString());
 
-                Thread.sleep(500);
+                TimeUnit.MILLISECONDS.sleep(500);
             }
         } 
-        catch (InterruptedException ie) 
+        catch (InterruptedException exception) 
         {
-            Thread.currentThread().interrupt();
+            exception.printStackTrace();
         }
     }
 
