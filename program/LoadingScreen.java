@@ -15,35 +15,35 @@ public class LoadingScreen
         startCustomSimulation();    
         //startBasicSimulation(9); 
 
-        new TerminalDisplay(progressBars).start();
+        displayProgress();
     }
 
-    //Create a new progress bar, add it to the list, and start loading
-    public static void createProgressBar(String title, int delay, int random)
+    // Create a new progress bar, add it to the list, and start loading
+    private static void createProgressBar(String title, int delay, int random)
     {
         ProgressBar progressBar = new ProgressBar(title, delay , random);
         progressBars.add(progressBar);
         progressBar.start();
     }
     
-    //Custom simulation with custom loading bars
-    public static void startCustomSimulation()
+    // Custom simulation with custom loading bars
+    private static void startCustomSimulation()
     {
         createProgressBar("RENDER", 2 , 5);
         createProgressBar("DISPLAY", 5 , 15);
         createProgressBar("AUDIO",2 , 5);
         createProgressBar("NETWORK I",2 , 9);
         createProgressBar("NETWORK II",2 , 5);
-        createProgressBar("FAN SYS 1",1 , 3);
-        createProgressBar("FAN SYS 2",2 , 5);
-        createProgressBar("FAN SYS 3",3 , 10);
+        createProgressBar("SYS FAN 1",1 , 3);
+        createProgressBar("SYS FAN 2",2 , 5);
+        createProgressBar("SYS FAN 3",3 , 10);
         createProgressBar("MOUSE",1 , 6);
         createProgressBar("KEYBOARD",1 , 9);
         createProgressBar("SSD",1 , 5);
     }
     
-    //Basic simulation with standard loading bars
-    public static void startBasicSimulation(int bars)
+    // Basic simulation with standard loading bars
+    private static void startBasicSimulation(int bars)
     {
         Random random = new Random();
 
@@ -52,5 +52,47 @@ public class LoadingScreen
             createProgressBar("CORE-" + i  , random.nextInt(1 , 4) , random.nextInt(1 , 11));
         }
     }
+
+    // Display the progress the bars progress to the terminal
+    private static void displayProgress()
+    {
+        try 
+        {
+            while (isScreenLoading()) 
+            {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+
+                StringBuilder output = new StringBuilder();
+
+                for (ProgressBar progressBar : progressBars) 
+                {
+                    output.append("\n" + progressBar.getProgress());
+                }
+
+                System.out.println(output.toString());
+
+                Thread.sleep(500);
+            }
+        } 
+        catch (InterruptedException ie) 
+        {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+     // Check if all the bars in the list are done loading or not
+     private static boolean isScreenLoading()
+     {
+         for(ProgressBar progressBar : progressBars)
+         {
+             if(!progressBar.isDoneLoading())
+             {
+                 return true;
+             }
+         }
+ 
+         return false;
+     }
 }
 
